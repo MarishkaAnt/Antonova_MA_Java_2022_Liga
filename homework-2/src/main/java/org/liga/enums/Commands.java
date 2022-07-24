@@ -50,8 +50,7 @@ public enum Commands {
                 throw new WrongCommandParametersException();
             }
             for (Task task : tasks) {
-                Integer userId = task.getUserId();
-                User user = userService.findById(userId).orElse(User.builder().build());
+                User user = task.getUser();
                 response.append(user).append(" - ").append(task).append(System.lineSeparator());
             }
             return response.toString();
@@ -68,7 +67,8 @@ public enum Commands {
                 String parametersLine = parameters.stream()
                         .skip(1)
                         .collect(Collectors.joining(","));
-                Optional<User> user = userService.create(parametersLine);
+                User userFromString = UserMapper.stringToUser(parametersLine);
+                Optional<User> user = userService.create(userFromString);
                 response = "Пользователь добавлен: " + user.orElseThrow(WrongCommandParametersException::new);
             } else {
                 throw new WrongCommandParametersException();
@@ -88,7 +88,8 @@ public enum Commands {
                 String parametersLine = parameters.stream()
                         .skip(1)
                         .collect(Collectors.joining(","));
-                Optional<Task> task = taskService.create(parametersLine);
+                Task taskFromString = TaskMapper.stringToTask(parametersLine);
+                Optional<Task> task = taskService.create(taskFromString);
                 response = "Задача добавлена: " + task.orElseThrow(WrongCommandParametersException::new);
             } else {
                 throw new WrongCommandParametersException();
@@ -134,7 +135,8 @@ public enum Commands {
                 String parametersLine = parameters.stream()
                         .skip(2)
                         .collect(Collectors.joining(","));
-                Optional<User> user = userService.update(id, parametersLine);
+                User userFromString = UserMapper.stringToUser(parametersLine);
+                Optional<User> user = userService.update(id, userFromString);
                 response = "Пользователь обновлен: " + user.orElseThrow(WrongCommandParametersException::new);
             }
             return response;
@@ -152,7 +154,8 @@ public enum Commands {
                 String parametersLine = parameters.stream()
                         .skip(2)
                         .collect(Collectors.joining(","));
-                Optional<Task> task = taskService.update(id, parametersLine);
+                Task newTask = TaskMapper.stringToTask(parametersLine);
+                Optional<Task> task = taskService.update(id, newTask);
                 response = "Задача обновлена: " + task.orElseThrow(WrongCommandParametersException::new);
             }
             return response;
@@ -227,7 +230,7 @@ public enum Commands {
             if (size == requiredAmountOfParams) {
                 int id = Integer.parseInt(parameters.get(1).trim());
                 String status = parameters.get(2).trim();
-                taskService.changeStatus(id, status);
+                taskService.changeStatus(id, Status.valueOf(status));
                 response = "Статус обновлен";
             } else {
                 throw new WrongCommandParametersException();

@@ -62,4 +62,10 @@ public class StringConstants {
             До свидания, надеюсь, приложение было полезно!
             Все вопросы и пожелания можно направить сюда: marishka.ant@gmail.com
             """;
+    public static final String FILE_READING_ERROR = "Извините, невозможно прочитать файл для хранения данных из-за: ";
+    public static final String TASK_NOT_FOUND = "Извините, не найдена задача с таким id: ";
+    public static final String IMPOSSIBLE_TO_DELETE = "Невозможно удалить задачу из файла: ";
+    public static final String USER_NOT_FOUND = "Извините, не найден пользователь с таким id: ";
+
+
 }

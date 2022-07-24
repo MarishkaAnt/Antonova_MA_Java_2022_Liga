@@ -1,13 +1,17 @@
 package org.liga.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.liga.model.Task;
 import org.liga.repository.UserRepository;
 import org.liga.mapper.UserMapper;
 import org.liga.model.User;
 import org.liga.service.UserService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,14 +22,13 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public Optional<User> create(String parametersLine) {
-        User user = UserMapper.stringToUser(parametersLine);
+    public Optional<User> create(User user) {
         return Optional.of(userRepository.save(user));
     }
 
     @Override
     public List<User> findAll() {
-        return userRepository.findAll();
+        return new ArrayList<>((Collection<? extends User>) userRepository.findAll());
     }
 
     @Override
@@ -44,10 +47,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> update(Integer id, String parametersLine) {
+    @Transactional
+    public Optional<User> update(Integer id, User user) {
         userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-        User newUser = UserMapper.stringToUser(parametersLine);
-        newUser.setId(id);
-        return Optional.of(userRepository.save(newUser));
+        user.setId(id);
+        return Optional.of(userRepository.save(user));
     }
 }

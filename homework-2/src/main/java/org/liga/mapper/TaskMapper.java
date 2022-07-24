@@ -3,6 +3,7 @@ package org.liga.mapper;
 import org.liga.enums.Status;
 import org.liga.exception.WrongCommandParametersException;
 import org.liga.model.Task;
+import org.liga.model.User;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -22,10 +23,13 @@ public class TaskMapper {
         }
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+            int userId = Integer.parseInt(parameters.get(2));
+            User user = new User();
+            user.setId(userId);
             task = Task.builder()
                     .name(parameters.get(0))
                     .description(parameters.get(1))
-                    .userId(Integer.parseInt(parameters.get(2)))
+                    .user(user)
                     .deadline(LocalDate.parse(parameters.get(3), formatter))
                     .build();
             if (parameters.size() == 5) {
@@ -46,7 +50,7 @@ public class TaskMapper {
         return task.getId() + ", "
                 + task.getName() + ", "
                 + task.getDescription() + ", "
-                + task.getUserId() + ", "
+                + task.getUser() + ", "
                 + task.getDeadline().format(formatter) + ", "
                 + task.getStatus();
     }

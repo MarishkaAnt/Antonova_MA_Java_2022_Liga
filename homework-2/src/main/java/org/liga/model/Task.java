@@ -4,6 +4,9 @@ import lombok.*;
 import org.liga.enums.Status;
 
 import javax.persistence.*;
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
@@ -20,16 +23,28 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Integer id;
+
+    @NotBlank
     String name;
+
+    @NotBlank
     String description;
-    Integer userId;
+
+    @ManyToOne
+    @JoinTable(name = "users")
+    User user;
+
     @Enumerated(EnumType.STRING)
     Status status;
+
+    @NotNull
+    @FutureOrPresent
     LocalDate deadline;
 
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        return this.getId() + ". "
+        return this.getUser() + " - "
+                + this.getId() + ". "
                 + this.getName() + ": "
                 + this.getDescription() + " - ("
                 + this.getStatus() + ") - "
@@ -43,7 +58,7 @@ public class Task {
         return getId().equals(task.getId()) &&
                 getName().equals(task.getName()) &&
                 getDescription().equals(task.getDescription()) &&
-                getUserId().equals(task.getUserId()) &&
+                getUser().equals(task.getUser()) &&
                 getStatus() == task.getStatus() &&
                 getDeadline().equals(task.getDeadline());
     }
@@ -51,6 +66,6 @@ public class Task {
     @Override
     public int hashCode() {
         return Objects.hash(getId(), getName(), getDescription(),
-                getUserId(), getStatus(), getDeadline());
+                getUser(), getStatus(), getDeadline());
     }
 }

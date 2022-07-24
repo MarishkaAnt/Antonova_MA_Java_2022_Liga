@@ -21,9 +21,9 @@ public class CommandHandlerService {
 
         String response;
 
-        List<String> commandParameters = Arrays.stream(
-                inputCommand.trim().split(",")
-        ).toList();
+        List<String> commandParameters = Arrays.asList(
+                inputCommand.trim().split(","));
+
         String command = commandParameters.get(0).trim();
         try {
             response = Commands.valueOf(command).action(userService, taskService, commandParameters);

@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface UserService {
 
-    Optional<User> create(String parametersLine);
+    Optional<User> create(User user);
 
     List<User> findAll();
 
@@ -17,6 +17,6 @@ public interface UserService {
 
     void deleteById(Integer id);
 
-    Optional<User> update(Integer id, String parametersLine);
+    Optional<User> update(Integer id, User user);
 
 }

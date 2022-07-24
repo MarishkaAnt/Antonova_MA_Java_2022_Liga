@@ -10,18 +10,18 @@ public interface TaskService {
 
     List<Task> findAllByStatus(Status status);
 
-    void changeStatus(Integer id, String status);
+    void changeStatus(Integer id, Status status);
 
     List<Task> findAll();
 
     Optional<Task> findById(Integer id);
 
-    Optional<Task> create(String parametersLine);
+    Optional<Task> create(Task task);
 
     void deleteAll();
 
     void deleteById(Integer id);
 
-    Optional<Task> update(Integer id, String parametersLine);
+    Optional<Task> update(Integer id, Task task);
 
 }
